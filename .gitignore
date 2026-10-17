@@ -1,0 +1,11 @@
+# 不上传 Python 虚拟环境
+.venv/
+venv/
+
+# 不上传 Python 缓存
+__pycache__/
+*.pyc
+
+# 不上传本地密钥和环境变量
+.env
+.env.*

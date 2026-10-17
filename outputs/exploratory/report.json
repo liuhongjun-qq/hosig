@@ -1,0 +1,188 @@
+{
+  "reproduction_status": "independent_method_reproduction_not_paper_results",
+  "config": {
+    "seed": 42,
+    "embedding_dim": 256,
+    "vocabulary_size": 2048,
+    "trees": 64,
+    "leaf_size": 16,
+    "top_k": 20,
+    "decay_floor": 0.3,
+    "alpha": 0.5,
+    "short_half_life": null,
+    "long_half_life": null,
+    "rff_dim": 512,
+    "rff_gamma": null,
+    "time_bins": 64,
+    "left_window": 16,
+    "right_window": 16,
+    "eta": 1.0,
+    "segmentation_beta": 0.01,
+    "min_block_size": 16,
+    "batch_size": 512,
+    "cms_width": 128,
+    "cms_depth": 4,
+    "hll_precision": 8,
+    "top_features": 10,
+    "context_salt": "hosig-reproduction-public-demo-salt"
+  },
+  "environment": {
+    "python": "3.13.7",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "dependencies": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "networkx": "3.7",
+      "matplotlib": "3.11.2"
+    }
+  },
+  "input": {
+    "path": "D:\\encrypted_traffic\\code\\outputs\\exploratory\\synthetic.jsonl",
+    "format": "jsonl",
+    "sha256": "892a30392c95b3a19cfafc932809505c15ee372215f630eb92ba89e21540494b",
+    "proxy_interval": null,
+    "limit": null,
+    "temporal_claims_valid": true,
+    "warning": null
+  },
+  "total_events": 768,
+  "total_blocks": 19,
+  "batches": [
+    {
+      "batch_id": 0,
+      "diagnostics": {
+        "n_events": 512,
+        "n_blocks": 9,
+        "n_edges": 4406,
+        "mean_degree": 17.2109375,
+        "n_components": 3,
+        "segmentation_penalty": 0.062383246250395076,
+        "positive_gain_candidates": 107,
+        "warnings": [],
+        "half_lives": {
+          "short_half_life": 35.05905103683472,
+          "long_half_life": 134.10148429870605
+        },
+        "timings_seconds": {
+          "encoding": 0.029252000036649406,
+          "forest": 0.16029069991782308,
+          "graph": 0.04028220009058714,
+          "spectral": 0.006547599914483726,
+          "segmentation": 0.07422140007838607,
+          "signatures": 0.027363200089894235,
+          "total": 0.33796730008907616
+        },
+        "representation_bytes": 524288,
+        "sparse_graph_bytes": 107796,
+        "signature_numeric_bytes": 41472
+      },
+      "metrics": {
+        "n_events": 512,
+        "n_clusters": 9,
+        "noise_rate": 0.0,
+        "ch": 423.8876010966569,
+        "silhouette": 0.09598167985677719,
+        "modularity": 0.6281922369232119,
+        "ari": 0.48797610413206044,
+        "nmi": 0.6891855772355531,
+        "boundary_clarity": {
+          "entity_count": 9,
+          "neighbor_rank": 1,
+          "iir_k": [
+            0.06063503723335928,
+            0.11442558686376417,
+            0.11442558686376417,
+            0.06306805843391251,
+            0.05842638878629518,
+            0.06018228928235946,
+            0.06018228928235946,
+            0.06523795407557549,
+            0.06523795407557549
+          ],
+          "iir_norm": [
+            0.9614222910777768,
+            1.8143191610007774,
+            1.8143191610007774,
+            1.0,
+            0.9264022111528732,
+            0.9542435707835055,
+            0.9542435707835055,
+            1.034405619826346,
+            1.034405619826346
+          ],
+          "duplicate_entity_count": 0
+        }
+      }
+    },
+    {
+      "batch_id": 1,
+      "diagnostics": {
+        "n_events": 256,
+        "n_blocks": 10,
+        "n_edges": 2233,
+        "mean_degree": 17.4453125,
+        "n_components": 3,
+        "segmentation_penalty": 0.055451774444795626,
+        "positive_gain_candidates": 133,
+        "warnings": [],
+        "half_lives": {
+          "short_half_life": 35.986820459365845,
+          "long_half_life": 132.22735738754272
+        },
+        "timings_seconds": {
+          "encoding": 0.0151926000835374,
+          "forest": 0.07717290008440614,
+          "graph": 0.018297199974767864,
+          "spectral": 0.0049007999477908015,
+          "segmentation": 0.04185580008197576,
+          "signatures": 0.01960920006968081,
+          "total": 0.17703580006491393
+        },
+        "representation_bytes": 262144,
+        "sparse_graph_bytes": 54620,
+        "signature_numeric_bytes": 46080
+      },
+      "metrics": {
+        "n_events": 256,
+        "n_clusters": 10,
+        "noise_rate": 0.0,
+        "ch": 190.71588030545766,
+        "silhouette": 0.09406554698944092,
+        "modularity": 0.567401458146744,
+        "ari": 0.4355403135463161,
+        "nmi": 0.6654542015249177,
+        "boundary_clarity": {
+          "entity_count": 10,
+          "neighbor_rank": 1,
+          "iir_k": [
+            0.07149073387765523,
+            0.07149073387765523,
+            0.060592849372095046,
+            0.06932392065798906,
+            0.07204928556561725,
+            0.07204928556561725,
+            0.06379263909210574,
+            0.07008995873860188,
+            0.07008995873860188,
+            0.06556998296326015
+          ],
+          "iir_norm": [
+            1.0199853896943711,
+            1.0199853896943711,
+            0.8645011419977292,
+            0.9890706444346796,
+            1.0279544582744387,
+            1.0279544582744387,
+            0.91015375440608,
+            1.0,
+            1.0,
+            0.9355117928917775
+          ],
+          "duplicate_entity_count": 0
+        }
+      }
+    }
+  ],
+  "signature_json_bytes": 287216
+}

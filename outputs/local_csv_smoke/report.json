@@ -1,0 +1,140 @@
+{
+  "reproduction_status": "independent_method_reproduction_not_paper_results",
+  "config": {
+    "seed": 42,
+    "embedding_dim": 256,
+    "vocabulary_size": 2048,
+    "trees": 64,
+    "leaf_size": 16,
+    "top_k": 20,
+    "decay_floor": 0.05,
+    "alpha": 0.5,
+    "short_half_life": null,
+    "long_half_life": null,
+    "rff_dim": 512,
+    "rff_gamma": null,
+    "time_bins": 64,
+    "left_window": 64,
+    "right_window": 64,
+    "eta": 1.0,
+    "segmentation_beta": 0.8,
+    "min_block_size": 8,
+    "batch_size": 512,
+    "cms_width": 128,
+    "cms_depth": 4,
+    "hll_precision": 8,
+    "top_features": 10,
+    "context_salt": "hosig-reproduction-public-demo-salt"
+  },
+  "environment": {
+    "python": "3.13.7",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "dependencies": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "networkx": "3.7",
+      "matplotlib": "3.11.2"
+    }
+  },
+  "input": {
+    "path": "D:\\encrypted_traffic\\dataset\\archive\\train_test_network.csv",
+    "format": "network-csv",
+    "sha256": "26ddc513552de36de6428b2e578efaed2b57504c716dfba847cc0109a64e1974",
+    "proxy_interval": 72.0,
+    "limit": 512,
+    "temporal_claims_valid": false,
+    "warning": "Synthetic row-order timestamps and structured-token payload proxy; not paper data"
+  },
+  "total_events": 512,
+  "total_blocks": 19,
+  "batches": [
+    {
+      "batch_id": 0,
+      "diagnostics": {
+        "n_events": 512,
+        "n_blocks": 19,
+        "n_edges": 4143,
+        "mean_degree": 16.18359375,
+        "n_components": 19,
+        "segmentation_penalty": 4.990659700031607,
+        "positive_gain_candidates": 0,
+        "warnings": [],
+        "half_lives": {
+          "short_half_life": 72.0,
+          "long_half_life": 72.0
+        },
+        "timings_seconds": {
+          "encoding": 0.022851699963212013,
+          "forest": 0.05832149996422231,
+          "graph": 0.05209050001576543,
+          "spectral": 0.011849100003018975,
+          "segmentation": 0.12902510003186762,
+          "signatures": 0.030444299918599427,
+          "total": 0.30459129996597767
+        },
+        "representation_bytes": 524288,
+        "sparse_graph_bytes": 101484,
+        "signature_numeric_bytes": 87552
+      },
+      "metrics": {
+        "n_events": 512,
+        "n_clusters": 19,
+        "noise_rate": 0.0,
+        "ch": 364.04211420847344,
+        "silhouette": 0.19383198022842407,
+        "modularity": 0.8909333302846977,
+        "ari": 0.0,
+        "nmi": 0.0,
+        "boundary_clarity": {
+          "entity_count": 19,
+          "neighbor_rank": 1,
+          "iir_k": [
+            0.020141525001041265,
+            74201.92622656781,
+            12791.082796629484,
+            18372.13178554777,
+            27467.789987452463,
+            43071.471708757956,
+            0.023784389437866843,
+            35196.29589784679,
+            43356.42026496316,
+            32733.35677704844,
+            59442.75636969014,
+            43579.425041978284,
+            74201.92622656781,
+            163532.12323297438,
+            38971.07695250047,
+            43579.425041978284,
+            59442.75636969014,
+            163532.12323297438,
+            43071.471708757956
+          ],
+          "iir_norm": [
+            4.6763029453079443e-07,
+            1.7227627309396056,
+            0.2969734325105173,
+            0.4265498961766858,
+            0.6377258286688005,
+            1.0,
+            5.522074935979175e-07,
+            0.8171602803785813,
+            1.0066157144137535,
+            0.7599776714941596,
+            1.380095780604667,
+            1.0117932662402396,
+            1.7227627309396056,
+            3.7967619109639688,
+            0.9048002170907077,
+            1.0117932662402396,
+            1.380095780604667,
+            3.7967619109639688,
+            1.0
+          ],
+          "duplicate_entity_count": 0
+        }
+      }
+    }
+  ],
+  "signature_json_bytes": 279503
+}

@@ -1,0 +1,144 @@
+{
+  "reproduction_status": "independent_method_reproduction_not_paper_results",
+  "config": {
+    "seed": 42,
+    "embedding_dim": 256,
+    "vocabulary_size": 2048,
+    "trees": 64,
+    "leaf_size": 16,
+    "top_k": 20,
+    "decay_floor": 0.05,
+    "alpha": 0.5,
+    "short_half_life": null,
+    "long_half_life": null,
+    "rff_dim": 512,
+    "rff_gamma": null,
+    "time_bins": 64,
+    "left_window": 64,
+    "right_window": 64,
+    "eta": 1.0,
+    "segmentation_beta": 0.8,
+    "min_block_size": 8,
+    "batch_size": 512,
+    "cms_width": 128,
+    "cms_depth": 4,
+    "hll_precision": 8,
+    "top_features": 10,
+    "context_salt": "hosig-reproduction-public-demo-salt"
+  },
+  "environment": {
+    "python": "3.13.7",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "dependencies": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "networkx": "3.7",
+      "matplotlib": "3.11.2"
+    }
+  },
+  "input": {
+    "path": "D:\\encrypted_traffic\\code\\outputs\\demo\\synthetic.jsonl",
+    "format": "jsonl",
+    "sha256": "892a30392c95b3a19cfafc932809505c15ee372215f630eb92ba89e21540494b",
+    "proxy_interval": null,
+    "limit": null,
+    "temporal_claims_valid": true,
+    "warning": null
+  },
+  "total_events": 768,
+  "total_blocks": 2,
+  "batches": [
+    {
+      "batch_id": 0,
+      "diagnostics": {
+        "n_events": 512,
+        "n_blocks": 1,
+        "n_edges": 4389,
+        "mean_degree": 17.14453125,
+        "n_components": 1,
+        "segmentation_penalty": 4.990659700031607,
+        "positive_gain_candidates": 0,
+        "warnings": [],
+        "half_lives": {
+          "short_half_life": 35.05905103683472,
+          "long_half_life": 134.10148429870605
+        },
+        "timings_seconds": {
+          "encoding": 0.044594099977985024,
+          "forest": 0.20066620002035052,
+          "graph": 0.05172690004110336,
+          "spectral": 0.003485499997623265,
+          "segmentation": 0.12587420002091676,
+          "signatures": 0.03823069995269179,
+          "total": 0.4645918000023812
+        },
+        "representation_bytes": 524288,
+        "sparse_graph_bytes": 107388,
+        "signature_numeric_bytes": 4608
+      },
+      "metrics": {
+        "n_events": 512,
+        "n_clusters": 1,
+        "noise_rate": 0.0,
+        "ch": null,
+        "silhouette": null,
+        "modularity": 0.0,
+        "ari": 0.0,
+        "nmi": 0.0,
+        "boundary_clarity": {
+          "entity_count": 1,
+          "neighbor_rank": null,
+          "iir_k": [],
+          "iir_norm": []
+        }
+      }
+    },
+    {
+      "batch_id": 1,
+      "diagnostics": {
+        "n_events": 256,
+        "n_blocks": 1,
+        "n_edges": 2189,
+        "mean_degree": 17.1015625,
+        "n_components": 1,
+        "segmentation_penalty": 4.43614195558365,
+        "positive_gain_candidates": 0,
+        "warnings": [],
+        "half_lives": {
+          "short_half_life": 35.986820459365845,
+          "long_half_life": 132.22735738754272
+        },
+        "timings_seconds": {
+          "encoding": 0.03556869993917644,
+          "forest": 0.10738860000856221,
+          "graph": 0.025656100013293326,
+          "spectral": 0.002211799961514771,
+          "segmentation": 0.052194699994288385,
+          "signatures": 0.015716299996711314,
+          "total": 0.23874689999502152
+        },
+        "representation_bytes": 262144,
+        "sparse_graph_bytes": 53564,
+        "signature_numeric_bytes": 4608
+      },
+      "metrics": {
+        "n_events": 256,
+        "n_clusters": 1,
+        "noise_rate": 0.0,
+        "ch": null,
+        "silhouette": null,
+        "modularity": 1.1102230246251565e-16,
+        "ari": 0.0,
+        "nmi": 0.0,
+        "boundary_clarity": {
+          "entity_count": 1,
+          "neighbor_rank": null,
+          "iir_k": [],
+          "iir_norm": []
+        }
+      }
+    }
+  ],
+  "signature_json_bytes": 30191
+}

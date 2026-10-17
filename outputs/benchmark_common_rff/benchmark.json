@@ -1,0 +1,624 @@
+{
+  "records": [
+    {
+      "method": "hosig",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 0,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 1,
+      "noise_rate": 0.0,
+      "ch": null,
+      "silhouette": null,
+      "modularity": 1.1102230246251565e-16,
+      "ari": 0.0,
+      "nmi": 0.0,
+      "boundary_clarity": {
+        "entity_count": 1,
+        "neighbor_rank": null,
+        "iir_k": [],
+        "iir_norm": []
+      },
+      "fit_seconds": 0.0685460000531748,
+      "pipeline_seconds": 0.21327060007024556,
+      "warnings": [],
+      "graph_mean_degree": 17.4025974025974,
+      "over_fit_budget": false
+    },
+    {
+      "method": "hdbscan",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 0,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 3,
+      "noise_rate": 0.0,
+      "ch": 923.9663486010859,
+      "silhouette": 0.6833478212356567,
+      "modularity": 0.6481974685190215,
+      "ari": 1.0,
+      "nmi": 1.0,
+      "boundary_clarity": {
+        "entity_count": 3,
+        "neighbor_rank": 1,
+        "iir_k": [
+          0.026420902336580208,
+          0.02541146539891673,
+          0.026420902336580208
+        ],
+        "iir_norm": [
+          1.0,
+          0.961794002157682,
+          1.0
+        ],
+        "duplicate_entity_count": 0
+      },
+      "fit_seconds": 0.020339900045655668,
+      "pipeline_seconds": 0.04601910011842847,
+      "warnings": [],
+      "graph_mean_degree": 17.4025974025974,
+      "over_fit_budget": false
+    },
+    {
+      "method": "spectral",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 0,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 4,
+      "noise_rate": 0.0,
+      "ch": 616.2590796571267,
+      "silhouette": 0.4767889976501465,
+      "modularity": 0.6616977180847896,
+      "ari": 0.9564984250806782,
+      "nmi": 0.9540789505985121,
+      "boundary_clarity": {
+        "entity_count": 4,
+        "neighbor_rank": 1,
+        "iir_k": [
+          0.024487124122986478,
+          0.026160667247071452,
+          0.09285815588988106,
+          0.09285815588988106
+        ],
+        "iir_norm": [
+          0.5998664421615064,
+          0.640863594567261,
+          2.274766580165803,
+          2.274766580165803
+        ],
+        "duplicate_entity_count": 0
+      },
+      "fit_seconds": 0.02861539996229112,
+      "pipeline_seconds": 0.17333360004704446,
+      "warnings": [],
+      "graph_mean_degree": 17.4025974025974,
+      "over_fit_budget": false
+    },
+    {
+      "method": "louvain",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 0,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 3,
+      "noise_rate": 0.0,
+      "ch": 923.9663486010859,
+      "silhouette": 0.6833478212356567,
+      "modularity": 0.6481974685190215,
+      "ari": 1.0,
+      "nmi": 1.0,
+      "boundary_clarity": {
+        "entity_count": 3,
+        "neighbor_rank": 1,
+        "iir_k": [
+          0.02541146539891673,
+          0.026420902336580208,
+          0.026420902336580208
+        ],
+        "iir_norm": [
+          0.961794002157682,
+          1.0,
+          1.0
+        ],
+        "duplicate_entity_count": 0
+      },
+      "fit_seconds": 0.0379652000265196,
+      "pipeline_seconds": 0.18268340011127293,
+      "warnings": [],
+      "graph_mean_degree": 17.4025974025974,
+      "over_fit_budget": false
+    },
+    {
+      "method": "hosig",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 1,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 1,
+      "noise_rate": 0.0,
+      "ch": null,
+      "silhouette": null,
+      "modularity": 0.0,
+      "ari": 0.0,
+      "nmi": 0.0,
+      "boundary_clarity": {
+        "entity_count": 1,
+        "neighbor_rank": null,
+        "iir_k": [],
+        "iir_norm": []
+      },
+      "fit_seconds": 0.06847579998429865,
+      "pipeline_seconds": 0.22815979993902147,
+      "warnings": [],
+      "graph_mean_degree": 17.272727272727273,
+      "over_fit_budget": false
+    },
+    {
+      "method": "hdbscan",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 1,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 3,
+      "noise_rate": 0.0,
+      "ch": 928.6569612082184,
+      "silhouette": 0.6833677291870117,
+      "modularity": 0.6481538023628856,
+      "ari": 1.0,
+      "nmi": 1.0,
+      "boundary_clarity": {
+        "entity_count": 3,
+        "neighbor_rank": 1,
+        "iir_k": [
+          0.025518231720998697,
+          0.026047696029056683,
+          0.026047696029056683
+        ],
+        "iir_norm": [
+          0.9796732767663076,
+          1.0,
+          1.0
+        ],
+        "duplicate_entity_count": 0
+      },
+      "fit_seconds": 0.019393200054764748,
+      "pipeline_seconds": 0.04801420005969703,
+      "warnings": [],
+      "graph_mean_degree": 17.272727272727273,
+      "over_fit_budget": false
+    },
+    {
+      "method": "spectral",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 1,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 4,
+      "noise_rate": 0.0,
+      "ch": 620.1464041558874,
+      "silhouette": 0.4595052897930145,
+      "modularity": 0.666749139086404,
+      "ari": 0.9652563378913939,
+      "nmi": 0.9606318481659041,
+      "boundary_clarity": {
+        "entity_count": 4,
+        "neighbor_rank": 1,
+        "iir_k": [
+          0.07797909480538402,
+          0.02504641997498382,
+          0.02576469932643885,
+          0.07797909480538402
+        ],
+        "iir_norm": [
+          2.013293320783382,
+          0.6466578019534638,
+          0.6652026058441751,
+          2.013293320783382
+        ],
+        "duplicate_entity_count": 0
+      },
+      "fit_seconds": 0.029832600033842027,
+      "pipeline_seconds": 0.18951089994516224,
+      "warnings": [],
+      "graph_mean_degree": 17.272727272727273,
+      "over_fit_budget": false
+    },
+    {
+      "method": "louvain",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 1,
+      "batch_id": 0,
+      "n_events": 308,
+      "n_clusters": 3,
+      "noise_rate": 0.0,
+      "ch": 928.6569612082185,
+      "silhouette": 0.6833677291870117,
+      "modularity": 0.6481538023628856,
+      "ari": 1.0,
+      "nmi": 1.0,
+      "boundary_clarity": {
+        "entity_count": 3,
+        "neighbor_rank": 1,
+        "iir_k": [
+          0.02604769602905668,
+          0.02604769602905668,
+          0.025518231720998697
+        ],
+        "iir_norm": [
+          1.0,
+          1.0,
+          0.9796732767663077
+        ],
+        "duplicate_entity_count": 0
+      },
+      "fit_seconds": 0.03650349995587021,
+      "pipeline_seconds": 0.19618179986719042,
+      "warnings": [],
+      "graph_mean_degree": 17.272727272727273,
+      "over_fit_budget": false
+    }
+  ],
+  "baseline_selection": [
+    {
+      "method": "hdbscan",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 0,
+      "selected": {
+        "min_cluster_size": 8,
+        "min_samples": 4
+      },
+      "trials": [
+        {
+          "params": {
+            "min_cluster_size": 8,
+            "min_samples": 4
+          },
+          "quality": 1.258319741187961,
+          "fit_seconds": 0.004970299894921482,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 8,
+            "min_samples": 8
+          },
+          "quality": 1.258319741187961,
+          "fit_seconds": 0.0047423000214621425,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 16,
+            "min_samples": 4
+          },
+          "quality": 1.258319741187961,
+          "fit_seconds": 0.003969300072640181,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 16,
+            "min_samples": 8
+          },
+          "quality": 1.258319741187961,
+          "fit_seconds": 0.0022745999740436673,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 32,
+            "min_samples": 4
+          },
+          "quality": -1.0,
+          "fit_seconds": 0.0031649000011384487,
+          "eligible": false,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 32,
+            "min_samples": 8
+          },
+          "quality": -1.0,
+          "fit_seconds": 0.003732800018042326,
+          "eligible": false,
+          "warnings": []
+        }
+      ],
+      "fallback": false
+    },
+    {
+      "method": "spectral",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 0,
+      "selected": {
+        "n_clusters": 4
+      },
+      "trials": [
+        {
+          "params": {
+            "n_clusters": 2
+          },
+          "quality": 0.8147694326423476,
+          "fit_seconds": 0.05653790000360459,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "n_clusters": 4
+          },
+          "quality": 1.0162512709909002,
+          "fit_seconds": 0.030732099898159504,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "n_clusters": 8
+          },
+          "quality": 0.5336207049618197,
+          "fit_seconds": 0.032134200097061694,
+          "eligible": true,
+          "warnings": []
+        }
+      ],
+      "fallback": false
+    },
+    {
+      "method": "louvain",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 0,
+      "selected": {
+        "resolution": 0.5
+      },
+      "trials": [
+        {
+          "params": {
+            "resolution": 0.5
+          },
+          "quality": 1.258319741187961,
+          "fit_seconds": 0.009105499950237572,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "resolution": 1.0
+          },
+          "quality": 0.7846756621684983,
+          "fit_seconds": 0.008264100062660873,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "resolution": 2.0
+          },
+          "quality": 0.5519665988895663,
+          "fit_seconds": 0.007674099993892014,
+          "eligible": true,
+          "warnings": []
+        }
+      ],
+      "fallback": false
+    },
+    {
+      "method": "hdbscan",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 1,
+      "selected": {
+        "min_cluster_size": 8,
+        "min_samples": 4
+      },
+      "trials": [
+        {
+          "params": {
+            "min_cluster_size": 8,
+            "min_samples": 4
+          },
+          "quality": 1.2798268807317488,
+          "fit_seconds": 0.0025815999833866954,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 8,
+            "min_samples": 8
+          },
+          "quality": 1.2798268807317488,
+          "fit_seconds": 0.0022947000106796622,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 16,
+            "min_samples": 4
+          },
+          "quality": 1.2798268807317488,
+          "fit_seconds": 0.0037094999570399523,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 16,
+            "min_samples": 8
+          },
+          "quality": 1.2798268807317488,
+          "fit_seconds": 0.0021280000219121575,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 32,
+            "min_samples": 4
+          },
+          "quality": -1.0,
+          "fit_seconds": 0.0024834000505506992,
+          "eligible": false,
+          "warnings": []
+        },
+        {
+          "params": {
+            "min_cluster_size": 32,
+            "min_samples": 8
+          },
+          "quality": -1.0,
+          "fit_seconds": 0.0020260000601410866,
+          "eligible": false,
+          "warnings": []
+        }
+      ],
+      "fallback": false
+    },
+    {
+      "method": "spectral",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 1,
+      "selected": {
+        "n_clusters": 4
+      },
+      "trials": [
+        {
+          "params": {
+            "n_clusters": 2
+          },
+          "quality": 0.8657391509594728,
+          "fit_seconds": 0.021391900023445487,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "n_clusters": 4
+          },
+          "quality": 1.0615100644061273,
+          "fit_seconds": 0.028995599946938455,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "n_clusters": 8
+          },
+          "quality": 0.578472973250156,
+          "fit_seconds": 0.03018739994149655,
+          "eligible": true,
+          "warnings": []
+        }
+      ],
+      "fallback": false
+    },
+    {
+      "method": "louvain",
+      "top_k": 20,
+      "client_count": 2,
+      "client_id": 1,
+      "selected": {
+        "resolution": 0.5
+      },
+      "trials": [
+        {
+          "params": {
+            "resolution": 0.5
+          },
+          "quality": 1.2798268807317488,
+          "fit_seconds": 0.01032530004158616,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "resolution": 1.0
+          },
+          "quality": 1.0615100644061273,
+          "fit_seconds": 0.008082899963483214,
+          "eligible": true,
+          "warnings": []
+        },
+        {
+          "params": {
+            "resolution": 2.0
+          },
+          "quality": 0.5865713149060405,
+          "fit_seconds": 0.007033199886791408,
+          "eligible": true,
+          "warnings": []
+        }
+      ],
+      "fallback": false
+    }
+  ],
+  "entity_protocol": "common-rff",
+  "config": {
+    "seed": 42,
+    "embedding_dim": 256,
+    "vocabulary_size": 2048,
+    "trees": 64,
+    "leaf_size": 16,
+    "top_k": 20,
+    "decay_floor": 0.05,
+    "alpha": 0.5,
+    "short_half_life": null,
+    "long_half_life": null,
+    "rff_dim": 512,
+    "rff_gamma": null,
+    "time_bins": 64,
+    "left_window": 64,
+    "right_window": 64,
+    "eta": 1.0,
+    "segmentation_beta": 0.8,
+    "min_block_size": 8,
+    "batch_size": 512,
+    "cms_width": 128,
+    "cms_depth": 4,
+    "hll_precision": 8,
+    "top_features": 10,
+    "context_salt": "hosig-reproduction-public-demo-salt"
+  },
+  "environment": {
+    "python": "3.13.7",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "dependencies": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "networkx": "3.7",
+      "matplotlib": "3.11.2"
+    }
+  },
+  "input": {
+    "path": "D:\\encrypted_traffic\\code\\outputs\\demo\\synthetic.jsonl",
+    "format": "auto",
+    "sha256": "892a30392c95b3a19cfafc932809505c15ee372215f630eb92ba89e21540494b",
+    "proxy_interval": null,
+    "limit": null,
+    "temporal_claims_valid": true,
+    "warning": null
+  },
+  "site_protocol": "synthetic_round_robin_sites_not_original_organizations",
+  "validation_fraction": 0.2,
+  "fit_budget_seconds": null
+}
