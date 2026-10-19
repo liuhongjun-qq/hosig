@@ -15,11 +15,17 @@ from ._07signatures import HoSig, build_signatures
 
 @dataclass
 class BatchResult:
+    # 内容特征向量
     embeddings: np.ndarray
+    # 稀疏关系图
     graph: sparse.csr_matrix
+    # 排序结果
     order: np.ndarray
+    # 分割结果：同源块划分、块边界等信息
     segmentation: Segmentation
+    # HoSig签名：为各个同源块生成的签名列表
     signatures: list[HoSig]
+    # 诊断信息：事件数、块数、边数、运行时间、内存占用等统计
     diagnostics: dict
 
     @property
@@ -36,15 +42,20 @@ class HoSigAlign:
         self.rff = RandomFourierFeatures(self.config)
 
     #处理一批网络安全事件	正式分析一批数据 
+    # 接收一个微批次的网络安全事件，
+    # 执行 HoSig-Align I 的核心算法，发现其中的同源块，并为每个同源块生成 HoSig 签名。
     def process_batch(self, events, batch_id="0"):
         if not events:
             raise ValueError("Cannot process an empty batch")
         if len(events) > self.config.batch_size:
             raise ValueError("Batch exceeds batch_size; use process_stream or increase the configured budget")
         start = perf_counter()
+        # 创建一个空字典，用来记录当前微批次中各个算法阶段的运行耗时。
         timings = {}
+        # 把当前微批次中的网络安全事件转换成数值特征向量，并将转换结果保存在 embeddings 中。
         embeddings = self.encoder.transform(events)
         timings["encoding"] = perf_counter() - start
+              
         stage_start = perf_counter()
         forest = RandomPartitionForest(
             self.config.trees, self.config.leaf_size, self.config.seed,

@@ -84,11 +84,14 @@ def run_stream(args, config):
     model = HoSigAlign(config)
     # 报告集合:创建一个空列表，准备存放后续每个微批次的处理报告。
     reports = []
-    # ead_events() 是一个函数，负责根据指定的输入路径、数据格式等参数读取事件。
+    # read_events() 是一个函数，负责根据指定的输入路径、数据格式等参数读取事件,返回一个可处理数据对象的迭代器
     events = read_events(args.input, args.format, args.proxy_interval, args.limit)
-    
+    # (output / "signatures.jsonl")用于保存生成的 HoSig 签名。
     with (output / "signatures.jsonl").open("w", encoding="utf-8") as exported:
+        # 把读取到的网络安全事件按照指定大小划分成一个个微批次（Micro-batch），
+        # 然后逐批处理，并为每个批次生成编号。
         for batch_id, batch in enumerate(micro_batches(events, config.batch_size)):
+            # 把当前微批次中的网络安全事件交给 HoSig-Align I 模型处理，并将处理结果保存到 result 变量中。
             result = model.process_batch(batch, f"{args.site_id}:{batch_id}")
             for signature in result.signatures:
                 exported.write(json.dumps(signature.to_dict(), allow_nan=False) + "\n")

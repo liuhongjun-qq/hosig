@@ -36,28 +36,53 @@ class ContentEncoder:
         ).astype(np.float32)
 
     def _ip_features(self, value):
+        # 将一个IP地址转换成两个数值特征，用来表示该IP所属的不同大小的网络范围。
         address = ipaddress.ip_address(value)
-        prefixes = (24, 16) if address.version == 4 else (64, 48)
-        return [
-            stable_hash(str(ipaddress.ip_network(f"{address}/{prefix}", strict=False)), digest_size=4)
-            / (2**32 - 1)
-            for prefix in prefixes
-        ]
+        if address.version == 4:
+            prefixes = (24, 16)
+        else:
+             prefixes = (64, 48)
+        result = []
+
+        for prefix in prefixes:
+            network = ipaddress.ip_network(f"{address}/{prefix}", strict=False)
+            network_str = str(network)
+             # 输入一个网络地址字符串，输出一个整数。使用长度为4字节的哈希摘要。
+            hash_value = stable_hash(network_str, digest_size=4)
+            # 第二行：将哈希整数缩放到0～1
+            feature_value = hash_value / (2**32 - 1)
+
+            result.append(feature_value)
+
+        return result
 
     def transform(self, events):
         if not events:
             return np.empty((0, self.config.embedding_dim), dtype=np.float32)
+        # 创建一个全部初始化为0的二维特征矩阵，用来存放当前微批次中每条网络安全事件的IP特征和Payload文本特征。
         features = np.zeros((len(events), self.config.vocabulary_size + 4), dtype=np.float32)
         for index, event in enumerate(events):
+            # ip特征
             features[index, :4] = self._ip_features(event.src_ip) + self._ip_features(event.dst_ip)
+            # 把当前网络安全事件的 Payload（载荷）拆分成多个 Token（词元），
+            # 再将每个 Token 映射到特征矩阵中的某一列，并统计它出现的次数。
             for token in payload_tokens(event.payload):
                 slot = 4 + stable_hash(token) % self.config.vocabulary_size
                 features[index, slot] += 1
         projected = features @ self.projection
+        # **对 projected 里面每一个数，查标准正态分布表，得到 0~1 之间的累积概率值，用来做特征归一化**。
         activated = projected * ndtr(projected)
+        # 每条事件单独计算自己的平均值。去中心化处理
         centered = activated - activated.mean(axis=1, keepdims=True)
-        return (centered / np.sqrt(activated.var(axis=1, keepdims=True) + 1e-5)).astype(np.float32)
-
+        # 计算每条事件的特征方差。
+        variance = activated.var(axis=1, keepdims=True)
+        # 对方差加一个很小的数，再开平方。
+        denominator = np.sqrt(variance + 1e-5)
+        # 用中心化后的特征除以计算结果
+        normalized = centered / denominator
+        # 转换为 float32，返回最终特征矩阵
+        result = normalized.astype(np.float32)
+        return result
 
 class RandomFourierFeatures:
     def __init__(self, config: Config):

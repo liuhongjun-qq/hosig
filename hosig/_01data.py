@@ -158,7 +158,8 @@ def read_events(path, data_format="auto", proxy_interval=None, limit=None):
             except (KeyError, TypeError, ValueError) as error:
                 raise ValueError(f"Invalid event at record {index + 1}: {error}") from error
 
-
+# 连续输入的网络安全事件，按照指定的事件数量划分成一个个微批次（Micro-batch），然后逐批输出。
+# 以列表的形式来输出的 batch = []
 def micro_batches(events: Iterable[Event], batch_size: int):
     if batch_size < 1:
         raise ValueError("batch_size must be positive")
