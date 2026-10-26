@@ -9,3 +9,9 @@ __pycache__/
 # 不上传本地密钥和环境变量
 .env
 .env.*
+data/
+outputs/
+*.mtx
+*.csv
+*.pcap
+*.npz

@@ -52,41 +52,81 @@ class HoSigAlign:
         start = perf_counter()
         # 创建一个空字典，用来记录当前微批次中各个算法阶段的运行耗时。
         timings = {}
+
         # 把当前微批次中的网络安全事件转换成数值特征向量，并将转换结果保存在 embeddings 中。
         embeddings = self.encoder.transform(events)
         timings["encoding"] = perf_counter() - start
-              
+        # 返回一个二维数组:
+
+        # 随机森林
         stage_start = perf_counter()
         forest = RandomPartitionForest(
             self.config.trees, self.config.leaf_size, self.config.seed,
         ).fit(embeddings)
         timings["forest"] = perf_counter() - stage_start
+
+        # 构图（双向top_k）
         stage_start = perf_counter()
         timestamps = np.array([event.timestamp for event in events])
         graph, decay = mutual_topk_graph(forest, timestamps, self.config)
+        '''第一个结果 graph： 构建完成的双向 Top-k 稀疏图。
+        第二个结果 decay： 一个字典，记录构图使用的短半衰期和长半衰期，'''
         timings["graph"] = perf_counter() - stage_start
+
+        # 谱排序
         stage_start = perf_counter()
         order, components, warnings = fiedler_order(graph, self.config.seed)
         timings["spectral"] = perf_counter() - stage_start
+
+        # rff向量的转化
+        # 变化点检测与同源块分割阶段
         stage_start = perf_counter()
         rff = self.rff.transform(embeddings)
+        '''
+        graph    双向 Top-k 构图    提供事件之间的连接关系
+        order    Fiedler 谱排序    提供事件重新排列后的顺序
+        components    连通分量检测    提供每个事件所属的连通分量
+        rff    RFF 转换    提供转换后的事件特征
+        self.config    配置文件    提供分割算法需要的参数
+        
+        '''
         segmentation = contrastive_segment(graph, order, components, rff, self.config)
         timings["segmentation"] = perf_counter() - stage_start
+
+        # 它属于 HoSig-Align I 流程中的 Step 9：HoSig 签名生成
         stage_start = perf_counter()
         signatures = build_signatures(events, graph, segmentation.blocks, rff, self.config, batch_id)
         timings["signatures"] = perf_counter() - stage_start
+
         timings["total"] = perf_counter() - start
+
+        # 计算稀疏图占用的内存
         graph_bytes = graph.data.nbytes + graph.indices.nbytes + graph.indptr.nbytes
         diagnostics = {
-            "n_events": len(events), "n_blocks": len(signatures), "n_edges": graph.nnz // 2,
+            "n_events": len(events), "n_blocks": len(signatures), 
+            # 图的边数
+            "n_edges": graph.nnz // 2,
+            # 每个事件平均与多少个其他事件相连
             "mean_degree": float(graph.nnz / len(events)),
+            # 连通分量数量
             "n_components": int(len(np.unique(components))),
+            # 分割惩罚值
             "segmentation_penalty": segmentation.penalty,
+            # 统计 segmentation.costs 中有多少个内部位置的值超过惩罚值
             "positive_gain_candidates": int(np.count_nonzero(segmentation.costs[1:-1] > segmentation.penalty)),
-            "warnings": warnings, "half_lives": decay, "timings_seconds": timings,
-            "representation_bytes": embeddings.nbytes, "sparse_graph_bytes": int(graph_bytes),
+            "warnings": warnings, 
+            # 记录构图时使用的时间衰减尺度
+            "half_lives": decay,
+            # 记录各个算法阶段花费的时间，单位为秒
+            "timings_seconds": timings,
+            # 事件编码矩阵占用的字节数
+            "representation_bytes": embeddings.nbytes,
+            # 稀疏图主要存储数组占用的字节数
+            "sparse_graph_bytes": int(graph_bytes),
+            # 签名数值数据内存
             "signature_numeric_bytes": sum(signature.numeric_bytes for signature in signatures),
         }
+        #  Segmentation(labels, blocks, boundaries, costs, float(penalty))
         return BatchResult(embeddings, graph, order, segmentation, signatures, diagnostics)
     # 将连续事件分成多个批次处理:负责安排一批接一批地处理
     def process_stream(self, events):

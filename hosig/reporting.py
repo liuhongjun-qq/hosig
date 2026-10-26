@@ -26,8 +26,12 @@ def environment_info():
         "dependencies": {name: version(name) for name in ("numpy", "scipy", "scikit-learn", "networkx", "matplotlib")},
     }
 
-
+'''
+上图：候选切分得分：得分曲线 + 惩罚线 + 最终边界线
+下图：同源块分配结果谱排序位置 + 每个位置的块编号
+'''
 def plot_boundaries(result, path):
+    # 
     figure, axes = plt.subplots(2, 1, figsize=(11, 6), sharex=True)
     axes[0].plot(result.segmentation.costs, label="C(b)")
     axes[0].axhline(result.segmentation.penalty, linestyle="--", color="red", label="penalty")

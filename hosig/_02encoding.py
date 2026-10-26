@@ -72,7 +72,7 @@ class ContentEncoder:
         projected = features @ self.projection
         # **对 projected 里面每一个数，查标准正态分布表，得到 0~1 之间的累积概率值，用来做特征归一化**。
         activated = projected * ndtr(projected)
-        # 每条事件单独计算自己的平均值。去中心化处理
+        # 每条事件单独计算自己的平均值。去中心化处理：让每条事件的特征均值变成0
         centered = activated - activated.mean(axis=1, keepdims=True)
         # 计算每条事件的特征方差。
         variance = activated.var(axis=1, keepdims=True)
@@ -81,6 +81,7 @@ class ContentEncoder:
         # 用中心化后的特征除以计算结果
         normalized = centered / denominator
         # 转换为 float32，返回最终特征矩阵
+        # 它让每条事件的特征均值接近0、方差接近1，从而减少不同事件特征数值尺度的差异。
         result = normalized.astype(np.float32)
         return result
 

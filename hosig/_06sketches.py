@@ -7,12 +7,19 @@ import numpy as np
 from ._02encoding import stable_hash
 
 
+
+# 提取事件的上下文特征 → 提取载荷特征 → 合并成事件的 Token 集合。
 def context_tokens(context):
     excluded = {"label", "ground_truth", "target", "timestamp", "event_id"}
-    return [
-        f"{name}={json.dumps(value, ensure_ascii=False, sort_keys=True)}"
-        for name, value in sorted(context.items()) if name not in excluded
-    ]
+
+    result = []
+    # 逐个取出字典中的字段名称和字段值。
+    for name, value in sorted(context.items()):
+        if name not in excluded:
+            token = f"{name}={json.dumps(value, ensure_ascii=False, sort_keys=True)}"
+            result.append(token)
+
+    return result
 
 
 class CountMinSketch:
@@ -22,9 +29,11 @@ class CountMinSketch:
         self.table = np.zeros((depth, width), dtype=np.uint32)
         self.salt = salt
 
+    # add(token)通过哈希定位，增加计数
     def add(self, token, count=1):
         if count < 0:
             raise ValueError("count must be nonnegative")
+        # 遍历 CMS 的每一行:，需要在每一行分别更新一个计数位置。
         for row in range(self.table.shape[0]):
             column = stable_hash(f"{row}:{token}", self.salt) % self.table.shape[1]
             value = int(self.table[row, column]) + count
@@ -32,6 +41,7 @@ class CountMinSketch:
                 raise OverflowError("Count-Min Sketch counter overflow")
             self.table[row, column] = value
 
+# estimate(token)查询各行对应的计数，取最小值
     def estimate(self, token):
         return min(
             int(self.table[row, stable_hash(f"{row}:{token}", self.salt) % self.table.shape[1]])
@@ -49,6 +59,7 @@ class HyperLogLog:
 
     def add(self, token):
         hashed = stable_hash(token, self.salt)
+        # 前4位用来选择寄存器，剩余60位用于计算统计值。
         remaining_bits = 64 - self.precision
         index = hashed >> remaining_bits
         remaining = hashed & ((1 << remaining_bits) - 1)

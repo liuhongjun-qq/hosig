@@ -65,7 +65,7 @@ def read_events(path, data_format="auto", proxy_interval=None, limit=None):
         else:
             # 如果当前不是 jsonl 读取模式，就使用 CSV 解析器读取文件，并将每一行数据整理成一个字典。
             reader = csv.DictReader(handle)
-            # 检查CSV文件是否包含程序需要的字段。如果缺少必要字段，就报错；如果字段符合要求，就把 reader 交给后续代码使用。
+            # 检查CSV文件是否包含·程序需要的字段。如果缺少必要字段，就报错；如果字段符合要求，就把 reader 交给后续代码使用。
             # 检查CSV文件是否有表头
             if not reader.fieldnames:
                 raise ValueError("Input has no CSV header")
@@ -76,85 +76,92 @@ def read_events(path, data_format="auto", proxy_interval=None, limit=None):
             if missing:
                 raise ValueError(f"Missing CSV columns: {sorted(missing)}")
             rows = reader
-        # `itertools.islice` 是**迭代器切片**，专门对迭代器 / 生成器做切片。
-        # - 第一个参数：可迭代对象（这里是生成器`rows`）
-        # - 第二个参数`limit`：stop，代表**最多取 limit 个元素，就停止**
+        # 逐条读取；普通 CSV/JSONL 使用真实时间，network-csv 保留原来的模拟时间模式。
         for index, row in enumerate(itertools.islice(rows, limit)):
             try:
-                if data_format == "network-csv":
-                    payload_columns = (
-                        "proto", "service", "conn_state", "dns_query", "dns_qtype",
-                        "ssl_version", "ssl_cipher", "http_method", "http_uri",
-                        "http_status_code", "http_user_agent", "weird_name",
-                    )
-                    tokens = [
-                        f"{name}={row[name]}" for name in payload_columns
-                        if row.get(name) not in (None, "", "-", "0")
-                    ]
-                    context = {
-                        name: row[name] for name in ("proto", "service", "dst_port", "conn_state")
-                        if row.get(name) not in (None, "", "-")
-                    }
-                    yield Event(
-                        timestamp=index * proxy_interval,
-                        src_ip=row["src_ip"], dst_ip=row["dst_ip"],
-                        payload=" ".join(tokens), context=context,
-                        label=row.get("type") or row.get("label"), event_id=str(index),
-                    )
-                else:
-                     # 1. 优先读取已有的 payload
-                    payload = str(row.get("payload") or "")
+                # 不属于内容特征的字段：时间、源/目的 IP、标签、事件标识。
+                # 注意：duration 等持续时间/统计字段按本次实验要求保留。
+                excluded_fields = {
+                    "timestamp", "ts", "src_ip", "dst_ip",
+                    "id.orig_h", "id.resp_h", "source_ip", "destination_ip",
+                    "event_id", "uid", "flow_id", "id",
+                    "label", "detailed-label", "detailed_label", "det_label",
+                    "attack_cat", "attack_category", "attack_type",
+                    "type", "class", "target", "ground_truth", "is_attack",
+                    "binary_label", "category_label",
+                    "start_time", "end_time", "start_timestamp", "end_timestamp",
+                    "time_delta", "time_interval",
+                    "payload", "context",
+                }
 
-                    # 2. 如果没有 payload，就自己构造
-                    if not payload:
-                        payload_columns = (
-                            "proto", "service", "conn_state",
-                            "dns_query", "dns_qtype",
-                            "ssl_version", "ssl_cipher",
-                            "http_method", "http_uri",
-                            "http_status_code", "http_user_agent",
-                            "weird_name",
-                        )
-
-                        tokens = [
-                            f"{name}={row[name]}"
-                            for name in payload_columns
-                            if row.get(name) not in (None, "", "-", "0")
-                        ]
-
-                        payload = " ".join(tokens)
-
-                    # 3. 优先读取已有的 context
-                    context = row.get("context") or {}
-
-                    # 4. 如果 context 是 JSON 字符串，转换成字典
-                    if isinstance(context, str):
-                        context = json.loads(context)
-
-                    # 5. 检查 context 是否为字典
-                    if not isinstance(context, dict):
-                        raise ValueError("context must be a JSON object")
-
-                    # 6. 如果 context 为空，就自己构造
-                    if not context:
-                        context = {
-                            name: row[name]
-                            for name in (
-                                "proto", "service", "dst_port", "conn_state"
-                            )
-                            if row.get(name) not in (None, "", "-")
+                def is_valid(value):
+                    # 数字 0 是有效值；None、NaN、空字符串和常见缺失标记不是。
+                    if value is None:
+                        return False
+                    if isinstance(value, float) and not math.isfinite(value):
+                        return False
+                    if isinstance(value, str):
+                        return value.strip().lower() not in {
+                            "", "-", "nan", "none", "null", "?", "n/a",
                         }
+                    return True
 
-                    # 7. 创建 Event 对象
-                    yield Event(
-                        timestamp=parse_timestamp(row["timestamp"]),
-                        src_ip=str(row["src_ip"]),
-                        dst_ip=str(row["dst_ip"]),
-                        payload=payload,
-                        context=context,
-                        label=None if row.get("label") in (None, "") else str(row["label"]),
-                        event_id=str(row.get("event_id") or index),
-                    )
+                # 自动遍历当前文件的实际字段；每个有效特征同时进入两种表示。
+                features = {}
+                for name, value in row.items():
+                    if not isinstance(name, str):
+                        continue
+                    if name.strip().lower() in excluded_fields or not is_valid(value):
+                        continue
+                    features[name] = value
+
+                # payload 是文本：将每个特征转换为 name=value 形式。
+                # 若原文件已有 payload，则保留它，并追加其他有效字段。
+                existing_payload = row.get("payload")
+                payload_parts = []
+                if is_valid(existing_payload):
+                    payload_parts.append(str(existing_payload))
+                for name, value in features.items():
+                    if isinstance(value, (dict, list, tuple)):
+                        value_text = json.dumps(value, ensure_ascii=False, sort_keys=True)
+                    else:
+                        value_text = str(value).strip()
+                    payload_parts.append(f"{name}={value_text}")
+                payload = " ".join(payload_parts)
+
+                # context 是字典：保留原有 context，同时加入所有有效特征。
+                context = row.get("context") or {}
+                if isinstance(context, str):
+                    context = json.loads(context)
+                if not isinstance(context, dict):
+                    raise ValueError("context must be a JSON object")
+                context = {
+                    name: value for name, value in context.items()
+                    if isinstance(name, str)
+                    and name.strip().lower() not in excluded_fields
+                    and is_valid(value)
+                }
+                context.update(features)
+
+                # 保留旧 network-csv 的模拟时间与标签规则；其他模式使用真实时间。
+                if data_format == "network-csv":
+                    timestamp = index * proxy_interval
+                    label = row.get("type") or row.get("label")
+                    event_id = str(index)
+                else:
+                    timestamp = parse_timestamp(row["timestamp"])
+                    label = row.get("label")
+                    event_id = str(row.get("event_id") or index)
+
+                yield Event(
+                    timestamp=timestamp,
+                    src_ip=str(row["src_ip"]),
+                    dst_ip=str(row["dst_ip"]),
+                    payload=payload,
+                    context=context,
+                    label=None if label in (None, "") else str(label),
+                    event_id=event_id,
+                )
             except (KeyError, TypeError, ValueError) as error:
                 raise ValueError(f"Invalid event at record {index + 1}: {error}") from error
 

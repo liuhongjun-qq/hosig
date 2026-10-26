@@ -93,15 +93,31 @@ def run_stream(args, config):
         for batch_id, batch in enumerate(micro_batches(events, config.batch_size)):
             # 把当前微批次中的网络安全事件交给 HoSig-Align I 模型处理，并将处理结果保存到 result 变量中。
             result = model.process_batch(batch, f"{args.site_id}:{batch_id}")
+            # Segmentation(labels, blocks, boundaries, costs, float(penalty))
+            # return BatchResult(embeddings, graph, order, segmentation, signatures, diagnostics)
+
+            # 遍历当前批次生成的所有 HoSig 签名，每次取出一个签名进行处理。
             for signature in result.signatures:
                 exported.write(json.dumps(signature.to_dict(), allow_nan=False) + "\n")
             local = output / "local" / f"batch_{batch_id:04d}"
+            # 创建当前批次的本地结果文件夹
             local.mkdir(parents=True, exist_ok=True)
             write_json(local / "assignments.json", {
-                "event_ids": [event.event_id for event in batch], "labels": result.labels.tolist(),
-                "evaluation_truth": [event.label for event in batch], "order": result.order.tolist(),
-                "boundaries": result.segmentation.boundaries, "costs": result.segmentation.costs.tolist(),
+                # 它会遍历当前批次的每个事件，提取事件编号。
+                "event_ids": [event.event_id for event in batch], 
+                # result.labels 保存算法给事件分配的标签
+                "labels": result.labels.tolist(),
+                # evaluation_truth：真实标签
+                "evaluation_truth": [event.label for event in batch], 
+                # order：事件排序结果
+                "order": result.order.tolist(),
+                # boundaries：同源块分割边界
+                "boundaries": result.segmentation.boundaries, 
+                # costs：分割代价或候选得分
+                "costs": result.segmentation.costs.tolist(),
             })
+
+            
             # 如果用户在运行 run 命令时开启了 --save-arrays，就执行下面保存文件的代码。
             if args.save_arrays:
                 # graph.npz 保存的是 result.graph，也就是算法处理当前批次后得到的稀疏图。
@@ -110,9 +126,13 @@ def run_stream(args, config):
                 # 而不是原始网络日志、数据包内容或者已经划分好的同源块。
                 np.savez_compressed(local / "representations.npz", embeddings=result.embeddings)
             entities = np.array([signature.prototype for signature in result.signatures])
+
+            # 评价划分质量
             scores = cluster_metrics(result.embeddings, result.labels, result.graph, entities, [event.label for event in batch], config.seed)
+            # 写入报告
             reports.append({"batch_id": batch_id, "diagnostics": result.diagnostics, "metrics": scores})
             if batch_id == 0:
+                # 
                 plot_boundaries(result, output / "first_batch_boundaries.png")
             print(f"batch={batch_id} events={len(batch)} blocks={len(result.signatures)} degree={result.diagnostics['mean_degree']:.2f}")
     if not reports:
@@ -122,7 +142,9 @@ def run_stream(args, config):
         "config": config.to_dict(), "environment": environment_info(), "input": input_metadata,
         "total_events": sum(report["diagnostics"]["n_events"] for report in reports),
         "total_blocks": sum(report["diagnostics"]["n_blocks"] for report in reports),
-        "batches": reports, "signature_json_bytes": (output / "signatures.jsonl").stat().st_size,
+        # 把 reports 列表中保存的所有微批次报告，放到最终的 report.json 文件的 "batches" 字段中。
+        "batches": reports, 
+        "signature_json_bytes": (output / "signatures.jsonl").stat().st_size,
     })
     print(f"Report: {output / 'report.json'}")
 
@@ -347,10 +369,12 @@ def main(argv=None):
             if len({signature.block_id for signature in signatures}) != len(signatures):
                 raise ValueError("Duplicate block IDs; namespace each site's block_id before cross-site alignment")
             graph = PrototypeHypergraph(args.cluster_threshold, args.merge_threshold, args.split_threshold, tuple(args.weights))
+            # 增量处理：每次拿一个签名出来，加入当前超图，再处理下一个签名。
             if args.incremental:
                 for signature in signatures:
                     graph.add(signature)
             else:
+                # ：一次性聚类
                 graph.fit(signatures)
             write_json(args.output, graph.to_dict())
             print(f"Hypergraph: {args.output}")
